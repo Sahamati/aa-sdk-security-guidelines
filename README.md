@@ -8,5 +8,5 @@ Currently, the guidelines are available for Web and Android platforms.
 
 ### Quick links:
 
-1. [Guidelines for Web based SDKs](<README (1).md>)
+1. [Guidelines for Web based SDKs](web-sdk.md)
 2. [Guidelines for Android platform based SDKs](android-sdk.md)
