@@ -4,10 +4,6 @@ description: Guidelines for creating a secure Android based SDK
 
 # Android SDK
 
-These guidelines have to be implemented in the account aggregator (AA) ecosystem by AAs that offer SDKs as AA Clients, which can be embedded into third-party apps (such as FIU apps).
-
-The AA SDK should be able to capture information securely without exposing the information captured to the embedding FIU app.
-
 ## General Guidelines
 
 ### 1. Run the SDK out of the process to ensure SDK does not share memory space with the FIU app

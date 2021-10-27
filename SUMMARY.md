@@ -1,4 +1,5 @@
 # Table of contents
 
-* [AA Web SDK](README.md)
+* [AA SDK Security Guidelines](README.md)
+* [AA Web SDK](<README (1).md>)
 * [Android SDK](android-sdk.md)
