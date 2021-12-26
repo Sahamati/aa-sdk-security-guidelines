@@ -6,7 +6,7 @@ description: Secure AA Web SDK development and integration with third-party apps
 
 ## General guidelines
 
-Follow are some general guidelines for creating secure Account Aggregator Web SDK which can be embedded in FIU applications without exposing any sensitive information.
+Following are some general guidelines for creating secure Account Aggregator Web SDK which can be embedded in FIU applications without exposing any sensitive information.
 
 ### 1. Prevent storing sensitive information such as Personal Information or Financial information in the browser’s local storage
 
