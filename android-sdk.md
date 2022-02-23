@@ -29,12 +29,15 @@ Notes:&#x20;
 2. FIU app can start the activity by invoking the “startActivity()” method when the activity is not expected to return any data to the calling app.&#x20;
 3. FIU app can start the activity by invoking the “startActivityForResult()” method when the activity is expected to return any data to the calling app.
 
-### **2. The SDK should use a custom/virtual keyboard and should not rely on system keyboards to capture sensitive information**
+### **2. The SDK should use a custom/virtual keyboard and should not rely on system keyboards to capture sensitive information such as PIN **
+
+Note: Optional if the information being entered is not sensitive. Example: OTP is temporary.
 
 The custom keyboard can be a number only or a regular keyboard based on what information needs to be captured. This will ensure any keylogging attacks can be successfully thwarted. We see similar methods being used in banking apps like SBI YONO and UPI apps like GPay and BHIM to capture login information and **UPI **PIN.
 
 ### **3. The activities exposed by the SDK should disable capturing of screenshots taken either manually or programmatically.**
 
+Note: **Required**
 Again this is to protect sensitive information to be captured by any outside process.
 
 To prevent screen capturing, android provides enough security to block either screenshot or recording for that particular activity by setting the “[FLAG\_SECURE](https://developer.android.com/reference/android/view/WindowManager.LayoutParams#FLAG\_SECURE)” attribute in the activity window. The FLAG\_SECURE attribute will also exclude the activity view from google assistant, read more about it [here](https://developer.android.com/training/articles/assistant#excluding\_views)**.**
@@ -50,10 +53,14 @@ protected void onCreate(Bundle savedInstanceState) {
 ```
 
 ### **4. Make activities exposed by the SDK private so that they can’t be launched by any other application other than the FIU app that embeds it.**
+Note: **Required**
 
 ### **5. Make sure your release artifact doesn’t contain any logs that output sensitive information.**
+Note: **Required**
 
 ### **6. Prevent reverse engineering of the SDK code.**
+
+Note: Not mandatory. Unless your SDK has propreitery code, one need not "hide" the code. This helps in discovery of vulnerabilities and quicker resolution.
 
 Hackers can try to reverse engineer the **SDK **code to find any vulnerabilities in the code or to modify its functionality or search for sensitive data hardcoded in the code.
 
@@ -63,23 +70,30 @@ Another option is using [NDK](https://developer.android.com/studio/projects/inst
 
 For obfuscating any string resources or an asset file, use a library like [StringCare](https://github.com/StringCare/AndroidLibrary/wiki/What-is-StringCare).
 
-While storing sensitive information in variables in code like the PIN entered by the user, do not use String data type (when coding in java) instead, use a char/byte array and clear the array once it's not required anymore.
+### 7. **While storing sensitive information in variables in code like the PIN entered by the user, do not use String data type (when coding in java) instead, use a char/byte array and clear the array once it's not required anymore.**
+Note: Mandatory
 
-### 7. **Keep resources private because all public resources are accessible outside your library.**
-
+### 8. **Keep resources private because all public resources are accessible outside your library.**
+Note: Best Practice
 Make sure your public resources names are also unique to prevent resource merge conflicts**.**
 
-### **8. **We can consider having to separate API keys used for SDKs shared with different FIUs.
+### **9. **We can consider having separate API keys used for SDKs shared with different FIUs.**
+Note: Mandatory
+Consent handle brings traceability for restricted flows of consent approval and rejection.
+But doesn't cover other use cases such as account creation and consent revocation etc.
+TODO: Elucidate more on FIU - AA comms.
+AA to generate a session token via. FIU to initialise the AA SDK with the oAuth token.
+
 
 This will help identify the source of all the calls to the AA network more reliably and also pin the source of the leak if any. Imagine a case where an FIU shares the AA SDK with another app developer who ends up misusing the AA network. In this case, we can easily find the source of the leak by looking at the API keys used to access the AA network.
 
-### 9. Do not broadcast sensitive information using implicit intent.
+### 10. Do not broadcast sensitive information using implicit intent.
 
 1. Use explicit intent to restrict receivers(If implicit intent is used, launch app chooser)
 2. You can also safely restrict the broadcast to a single application by using `Intent.setPackage()`
 3. Use LocalBroadcast Manager instead of `Context.SendBroadcast` so that you don’t have to worry about leaking private data.
 
-### 10. Store data safely
+### 11. Store data safely
 
 1. Store private data within internal storage. By default, files that you create on internal storage are accessible only to your app. Android implements this protection, and it's sufficient for most applications.
 2. Store only non-sensitive data in cache files
