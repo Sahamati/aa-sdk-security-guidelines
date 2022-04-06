@@ -38,7 +38,8 @@ The custom keyboard can be a number only or a regular keyboard based on what inf
 ### **3. The activities exposed by the SDK should disable capturing of screenshots taken either manually or programmatically.**
 
 Note: **Required**
-Again this is to protect sensitive information to be captured by any outside process.
+- Again this is to protect sensitive information to be captured by any outside process.
+- Especially parts which show personal info and bank account information
 
 To prevent screen capturing, android provides enough security to block either screenshot or recording for that particular activity by setting the “[FLAG\_SECURE](https://developer.android.com/reference/android/view/WindowManager.LayoutParams#FLAG\_SECURE)” attribute in the activity window. The FLAG\_SECURE attribute will also exclude the activity view from google assistant, read more about it [here](https://developer.android.com/training/articles/assistant#excluding\_views)**.**
 
@@ -82,24 +83,36 @@ Note: Mandatory
 Consent handle brings traceability for restricted flows of consent approval and rejection.
 But doesn't cover other use cases such as account creation and consent revocation etc.
 TODO: Elucidate more on FIU - AA comms.
-AA to generate a session token via. FIU to initialise the AA SDK with the oAuth token.
+  - con: Storage of API keys
+
+Possible options of Auth:
+  - oAuth login for FIU to use SDK?
+    - returns a unique token per sdk per device
+  - TOTP? 
+    - Token fetch has to happen at FIU server side
+    - Same token needs to be used to initialise the AA SDK    
+
+AA to generate a session token. FIU to initialise the AA SDK with the token.
 
 
 This will help identify the source of all the calls to the AA network more reliably and also pin the source of the leak if any. Imagine a case where an FIU shares the AA SDK with another app developer who ends up misusing the AA network. In this case, we can easily find the source of the leak by looking at the API keys used to access the AA network.
 
 ### 10. Do not broadcast sensitive information using implicit intent.
-
+Note: Mandatory
 1. Use explicit intent to restrict receivers(If implicit intent is used, launch app chooser)
 2. You can also safely restrict the broadcast to a single application by using `Intent.setPackage()`
 3. Use LocalBroadcast Manager instead of `Context.SendBroadcast` so that you don’t have to worry about leaking private data.
 
 ### 11. Store data safely
-
+Note: Mandatory
 1. Store private data within internal storage. By default, files that you create on internal storage are accessible only to your app. Android implements this protection, and it's sufficient for most applications.
 2. Store only non-sensitive data in cache files
 3. Use SharedPreferences in private mode(MODE\_PRIVATE)
 4. Don't store sensitive information using external storage.
 5. Don't store sensitive information using external storage. Files created on external storage, such as SD cards, are globally readable and writable. Because external storage can be removed by the user and also modified by any application, don't store sensitive information using external storage.
+
+### 12. 
+
 
 ## **How to ensure AA SDK is running out of the process**
 
