@@ -1,6 +1,6 @@
 ---
 description: Secure AA Web SDK development and integration with third-party apps
-scope: Consent approval, rejection and revocation.
+scope: Consent approval, sign-up, sign-in, discovery, linking, rejection and revocation.
 ---
 
 # AA Web SDK
@@ -106,6 +106,8 @@ Update and fix any issue in the future and ensure adherence to use stable versio
 ### 12. Generating CSRF tokens for every request can be used to prevent MITM attacks
 **Note**: Optional  
 CSRF tokens ensure that the request is not being forged by a third party.
+
+### 13. SDK can further share metrics/callback to the FIU.
 
 
 ## Best Practices
