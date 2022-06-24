@@ -38,12 +38,16 @@ Securing cookies is very important to keep applications and data secure. If cook
 
 ### 4. IFrame Integration
 
-Embedding AA Web SDK in IFrame will enhance user experience but they also bring security risks.
+Embedding AA Web SDK in IFrame will enhance user experience but they also bring security risks. However, care should be taken to ensure that both the embedding FIU application and the embedded AA application are protected from potential security risks.
 
-1. Don't use iframes at any point in time. This could lead to various vulnerabilities like clickjacking etc. Use DIVs to load your content.&#x20;
-2. Use frame bursting codes to prevent your page from being vulnerable to clickjacking attacks.
-3. X-Frame-Options is an HTTP header that allows sites control over how your site may be framed within an iframe.
-4. X-Frame-Options has been superseded by the Content Security Policy’s frame-ancestors directive, which allows considerably more granular control over the origins allowed to frame a site:
+1. Use the **Content Security Poicy** header or using the meta tag to protect the page.&#x20;
+   1. Use CSP frame-ancestors to specify valid parents that may embed a page using <frame>, <iframe>, <object>, <embed>, or <applet>
+   2. Use CSP frame-src to specify valid sources for nested browsing contexts loading using elements such as <frame> and <iframe>
+   3. Use IFrame Sandbox attribute to apply extra restrictions to the content in the frame
+   4. Use CSP Sandbox (similar to iFrame sandbox attribute) to apply extra restrictions to the content in the frame
+3. Use frame bursting codes to prevent your page from being vulnerable to clickjacking attacks.
+4. X-Frame-Options is an HTTP header that allows sites control over how your site may be framed within an iframe.
+5. X-Frame-Options has been superseded by the Content Security Policy’s frame-ancestors directive, which allows considerably more granular control over the origins allowed to frame a site:
    1. DENY - disallow allow attempts to iframe site
    2. SAMEORIGIN - allow the site to iframe itself
 
