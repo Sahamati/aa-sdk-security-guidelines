@@ -41,8 +41,8 @@ Securing cookies is very important to keep applications and data secure. If cook
 Embedding AA Web SDK in IFrame will enhance user experience but they also bring security risks. However, care should be taken to ensure that both the embedding FIU application and the embedded AA application are protected from potential security risks.
 
 1. Use the **Content Security Poicy** header or using the meta tag to protect the page.&#x20;
-   1. Use CSP frame-ancestors to specify valid parents that may embed a page using <frame>, <iframe>, <object>, <embed>, or <applet>
-   2. Use CSP frame-src to specify valid sources for nested browsing contexts loading using elements such as <frame> and <iframe>
+   1. Use CSP frame-ancestors to specify valid parents that may embed a page using "frame", "iframe", "object", "embed", or "applet"
+   2. Use CSP frame-src to specify valid sources for nested browsing contexts loading using elements such as "frame" and "iframe"
    3. Use IFrame Sandbox attribute to apply extra restrictions to the content in the frame
    4. Use CSP Sandbox (similar to iFrame sandbox attribute) to apply extra restrictions to the content in the frame
 3. Use frame bursting codes to prevent your page from being vulnerable to clickjacking attacks.
