@@ -40,11 +40,11 @@ Securing cookies is very important to keep applications and data secure. If cook
 
 Embedding AA Web SDK in IFrame will enhance user experience but they also bring security risks. However, care should be taken to ensure that both the embedding FIU application and the embedded AA application are protected from potential security risks.
 
-1. Use the **Content Security Poicy** header or using the meta tag to protect the page.&#x20;
-   1. AA pages to use CSP frame-ancestors to specify valid parents (FIUs) that may embed a page using "frame", "iframe", "object", "embed", or "applet"
-   2. FUI pages to use CSP frame-src to specify valid sources (AAs) for nested browsing contexts loading using elements such as "frame" and "iframe"
-   3. Use IFrame Sandbox attribute to apply extra restrictions to the content in the frame
-   4. Use CSP Sandbox (similar to iFrame sandbox attribute) to apply extra restrictions to the content in the frame
+1. Use the **Content Security Policy** either in the header or use it in the meta tag to protect the page.&#x20;
+   1. AA pages to use CSP frame-ancestors to specify valid parents (FIUs' domain names) that may embed a page using "frame", "iframe", "object", "embed", or "applet"
+   2. FIU pages to use CSP frame-src to specify valid sources (AAs) for nested browsing contexts, loading the frame using elements such as "frame", "iframe", "Object", "embed" or "applet"
+   3. FIU pages to use IFrame Sandbox attribute to apply extra restrictions to the content in the frame, e.g. to block pop-ups
+   4. FIU pages to use CSP Sandbox (similar to iFrame sandbox attribute) to apply extra restrictions to the content in the frame, e.g. to block pop-ups
 3. Use frame bursting codes to prevent your page from being vulnerable to clickjacking attacks.
 4. X-Frame-Options is an HTTP header that allows sites control over how your site may be framed within an iframe.
 5. X-Frame-Options has been superseded by the Content Security Policy’s frame-ancestors directive, which allows considerably more granular control over the origins allowed to frame a site:
