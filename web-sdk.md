@@ -46,10 +46,57 @@ Embedding AA Web SDK in IFrame will enhance user experience but they also bring 
    3. FIU pages to use IFrame Sandbox attribute to apply extra restrictions to the content in the frame, e.g. to block pop-ups
    4. FIU pages to use CSP Sandbox (similar to iFrame sandbox attribute) to apply extra restrictions to the content in the frame, e.g. to block pop-ups
 3. Use frame bursting codes to prevent your page from being vulnerable to clickjacking attacks.
-4. X-Frame-Options is an HTTP header that allows sites control over how your site may be framed within an iframe.
-5. X-Frame-Options has been superseded by the Content Security Policy’s frame-ancestors directive, which allows considerably more granular control over the origins allowed to frame a site:
-   1. DENY - disallow allow attempts to iframe site
-   2. SAMEORIGIN - allow the site to iframe itself
+
+The following mandatory considerations must be made by FIU , embedding the Account Aggregator page. This is standard mechanism for prevention of “clickjacking”
+
+CSP: frame-src
+The HTTP Content-Security-Policy (CSP) frame-src directive specifies valid sources for nested browsing contexts loading using elements such as <frame> and <iframe>. 
+Example :: 
+
+Content-Security-Policy: frame-src https://account-aggregator-1.com https://account-aggregator-2.com ;
+
+** https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-src
+** https://w3c.github.io/webappsec-csp/#frame-src
+
+Considerations to be made by Account Aggregator:
+
+The domain of Account Aggregator and FIU must by all means be different. 
+Sud-domain must not be allowed 
+
+By opening an Account Aggregator Document* , within an Iframe in a different domain than the FIU ( must ), the  prevention of Cross-origin script API access is automatically adhered to. 
+
+*https://www.w3.org/TR/2011/WD-html5-20110525/infrastructure.html#document
+
+JavaScript APIs like iframe.contentWindow, window.parent, window.open, and window.opener allow documents to directly reference each other. When two documents do not have the same origin, these references provide very limited access to Window and Location objects.
+
+Methods Accessible:
+
+window.blur
+window.close
+window.focus
+window.postMessage
+
+window.closed	
+window.frames	
+window.length	
+window.location
+window.opener	
+window.parent	
+window.self	
+window.top	
+window.window	
+
+https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy
+
+If the browsing context container's Document does not have the same effective script origin as the entry script, then throw a SECURITY_ERR exception.
+https://www.w3.org/TR/2011/WD-html5-20110525/browsers.html#browsing-context
+
+Typical Error Scene in Chrome Browser 
+
+_VM996:1 Uncaught DOMException: Blocked a frame with origin "https://fiu.com" from accessing a cross-origin frame.
+      at <anonymous>:1:49_
+
+The embedded Account Aggregator Page  ( Nested-browsing-Context aka iFrame ) in a FIU page must and mandatorily implement these security features. 
 
 ### 5. Widget-like integration
 
