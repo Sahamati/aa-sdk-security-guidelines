@@ -174,7 +174,7 @@ It is recommended to set the maximum number of incorrect password/OTP submission
 |User attempts to link with but OTP authentication fails	                                 |aa-on-link-auth-fail	        |No            |
 |User enters valid OTP but link fails at FIP with some error	                           |aa-on-link-fip-fail	           |No            |
 |Unknown error occurred which is not handled by AA	                                       |aa-on-unknown-error	           |Yes           |
-   
+------------------------------------------------------------------------------------------------------------------------------------------   
 ## References
 
 * [https://www.pluralsight.com/courses/javascript-security-best-practices](https://www.pluralsight.com/courses/javascript-security-best-practices)
