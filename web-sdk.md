@@ -155,6 +155,26 @@ Below are some of the guidelines which are general best practices and should be 
 
 It is recommended to set the maximum number of incorrect password/OTP submissions no more than three.
 
+## Callback Events for iFrame implemenation
+| Event trigger	                                                                        |iFrame event                   |Terminal event|
+|-----------------------------------------------------------------------------------------|-------------------------------|--------------|
+|When the user has accepted the consent	                                                |aa-on-complete	              |Yes           |
+|When the user rejects the consent	                                                      |aa-on-reject	                 |Yes           |
+|Consent request not found with the AA	                                                   |aa-on-consent-not-found	     |Yes           |
+|The redirection request has invalid data	                                                |aa-on-invalid-request	        |Yes           |
+|User is not able to authenticate self	                                                   |aa-on-auth-fail	              |Yes           |
+|User clicks cancel at anytime in the journey                                             |aa-on-user-cancel	           |Yes           |
+|User authentication successful - enters vaid OTP and logs in	                           |aa-on-auth-success	           |No            |
+|On any AA page, user doesnt act  and timeout occurs after certain wait	                  |aa-on-session-timeout	        |Yes           |
+|On login page, user entered wrong OTP (once or more)	                                    |aa-on-auth-fail	              |Yes           |
+|At least one account is discovered for the user or already had discovered/linked account	|aa-on-acct-discovered	        |No            |
+|No accounts discovered for the user	                                                   |aa-on-no-acct-discovered	     |No            |
+|When FIP Id is passed, no accounts discovered for the user due to FIP error	            |aa-on-acct-discovery-fip-error |No            |
+|One or more account linked successfully by the user	                                    |a-on-acct-link	              |No            |
+|User attempts to link with but OTP authentication fails	                                 |aa-on-link-auth-fail	        |No            |
+|User enters valid OTP but link fails at FIP with some error	                           |aa-on-link-fip-fail	           |No            |
+|Unknown error occurred which is not handled by AA	                                       |aa-on-unknown-error	           |Yes           |
+   
 ## References
 
 * [https://www.pluralsight.com/courses/javascript-security-best-practices](https://www.pluralsight.com/courses/javascript-security-best-practices)
@@ -174,3 +194,5 @@ It is recommended to set the maximum number of incorrect password/OTP submission
 | --------------- | ------------- | ----------------------------------------------------- |
 | Initial release | Tamaghna Basu | Initial guidelines for Web SDK.                       |
 | 26 Dec, 2021    | Lendingkart   | Extended guidelines, including common best practices. |
+| 20 Jan, 2023    | Kantha        | Updated iFrame implemenation guidelines               |
+| 20 Jan, 2023    | Kantha        | Added the iFrame events                               |
