@@ -38,14 +38,65 @@ Securing cookies is very important to keep applications and data secure. If cook
 
 ### 4. IFrame Integration
 
-Embedding AA Web SDK in IFrame will enhance user experience but they also bring security risks.
+Embedding AA Web SDK in IFrame will enhance user experience but they also bring security risks. However, care should be taken to ensure that both the embedding FIU application and the embedded AA application are protected from potential security risks.
 
-1. Don't use iframes at any point in time. This could lead to various vulnerabilities like clickjacking etc. Use DIVs to load your content.&#x20;
-2. Use frame bursting codes to prevent your page from being vulnerable to clickjacking attacks.
-3. X-Frame-Options is an HTTP header that allows sites control over how your site may be framed within an iframe.
-4. X-Frame-Options has been superseded by the Content Security Policy’s frame-ancestors directive, which allows considerably more granular control over the origins allowed to frame a site:
-   1. DENY - disallow allow attempts to iframe site
-   2. SAMEORIGIN - allow the site to iframe itself
+1. Use the **Content Security Policy** either in the header or use it in the meta tag to protect the page.&#x20;
+   1. AA pages to use CSP frame-ancestors to specify valid parents (FIUs' domain names) that may embed a page using "frame", "iframe", "object", "embed", or "applet"
+   2. FIU pages to use CSP frame-src to specify valid sources (AAs) for nested browsing contexts, loading the frame using elements such as "frame", "iframe", "Object", "embed" or "applet"
+   3. FIU pages to use IFrame Sandbox attribute to apply extra restrictions to the content in the frame, e.g. to block pop-ups
+   4. FIU pages to use CSP Sandbox (similar to iFrame sandbox attribute) to apply extra restrictions to the content in the frame, e.g. to block pop-ups
+3. Use frame bursting codes to prevent your page from being vulnerable to clickjacking attacks.
+
+The following mandatory considerations must be made by FIU , embedding the Account Aggregator page. This is standard mechanism for prevention of “clickjacking”
+
+CSP: frame-src
+The HTTP Content-Security-Policy (CSP) frame-src directive specifies valid sources for nested browsing contexts loading using elements such as <frame> and <iframe>. 
+Example :: 
+
+Content-Security-Policy: frame-src https://account-aggregator-1.com https://account-aggregator-2.com ;
+
+** https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-src
+** https://w3c.github.io/webappsec-csp/#frame-src
+
+Considerations to be made by Account Aggregator:
+
+The domain of Account Aggregator and FIU must by all means be different. 
+Sud-domain must not be allowed 
+
+By opening an Account Aggregator Document* , within an Iframe in a different domain than the FIU ( must ), the  prevention of Cross-origin script API access is automatically adhered to. 
+
+*https://www.w3.org/TR/2011/WD-html5-20110525/infrastructure.html#document
+
+JavaScript APIs like iframe.contentWindow, window.parent, window.open, and window.opener allow documents to directly reference each other. When two documents do not have the same origin, these references provide very limited access to Window and Location objects.
+
+Methods Accessible:
+
+window.blur
+window.close
+window.focus
+window.postMessage
+
+window.closed	
+window.frames	
+window.length	
+window.location
+window.opener	
+window.parent	
+window.self	
+window.top	
+window.window	
+
+https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy
+
+If the browsing context container's Document does not have the same effective script origin as the entry script, then throw a SECURITY_ERR exception.
+https://www.w3.org/TR/2011/WD-html5-20110525/browsers.html#browsing-context
+
+Typical Error Scene in Chrome Browser 
+
+_VM996:1 Uncaught DOMException: Blocked a frame with origin "https://fiu.com" from accessing a cross-origin frame.
+      at <anonymous>:1:49_
+
+The embedded Account Aggregator Page  ( Nested-browsing-Context aka iFrame ) in a FIU page must and mandatorily implement these security features. 
 
 ### 5. Widget-like integration
 
@@ -104,6 +155,26 @@ Below are some of the guidelines which are general best practices and should be 
 
 It is recommended to set the maximum number of incorrect password/OTP submissions no more than three.
 
+## Callback Events for iFrame implemenation
+| Event trigger	                                                                        |iFrame event                   |Terminal event|
+|-----------------------------------------------------------------------------------------|-------------------------------|--------------|
+|When the user has accepted the consent	                                                |aa-on-complete	              |Yes           |
+|When the user rejects the consent	                                                      |aa-on-reject	                 |Yes           |
+|Consent request not found with the AA	                                                   |aa-on-consent-not-found	     |Yes           |
+|The redirection request has invalid data	                                                |aa-on-invalid-request	        |Yes           |
+|User is not able to authenticate self	                                                   |aa-on-auth-fail	              |Yes           |
+|User clicks cancel at anytime in the journey                                             |aa-on-user-cancel	           |Yes           |
+|User authentication successful - enters vaid OTP and logs in	                           |aa-on-auth-success	           |No            |
+|On any AA page, user doesnt act  and timeout occurs after certain wait	                  |aa-on-session-timeout	        |Yes           |
+|On login page, user entered wrong OTP (once or more)	                                    |aa-on-auth-fail	              |Yes           |
+|At least one account is discovered for the user or already had discovered/linked account	|aa-on-acct-discovered	        |No            |
+|No accounts discovered for the user	                                                   |aa-on-no-acct-discovered	     |No            |
+|When FIP Id is passed, no accounts discovered for the user due to FIP error	            |aa-on-acct-discovery-fip-error |No            |
+|One or more account linked successfully by the user	                                    |a-on-acct-link	              |No            |
+|User attempts to link with but OTP authentication fails	                                 |aa-on-link-auth-fail	        |No            |
+|User enters valid OTP but link fails at FIP with some error	                           |aa-on-link-fip-fail	           |No            |
+|Unknown error occurred which is not handled by AA	                                       |aa-on-unknown-error	           |Yes           |
+------------------------------------------------------------------------------------------------------------------------------------------   
 ## References
 
 * [https://www.pluralsight.com/courses/javascript-security-best-practices](https://www.pluralsight.com/courses/javascript-security-best-practices)
@@ -123,3 +194,5 @@ It is recommended to set the maximum number of incorrect password/OTP submission
 | --------------- | ------------- | ----------------------------------------------------- |
 | Initial release | Tamaghna Basu | Initial guidelines for Web SDK.                       |
 | 26 Dec, 2021    | Lendingkart   | Extended guidelines, including common best practices. |
+| 20 Jan, 2023    | Kantha        | Updated iFrame implemenation guidelines               |
+| 20 Jan, 2023    | Kantha        | Added the iFrame events                               |
